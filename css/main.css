@@ -1,0 +1,8 @@
+# Styles
+
+.gameContainer
+{
+	margin: auto;
+	width: 600px;
+	border: 1px solid #000;
+}
