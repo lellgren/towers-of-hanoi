@@ -10,10 +10,11 @@ TowerGame = function() {
 		"pegB": [],
 		"pegC": [],
         "currentPiece": null,
+        "gameOver": true,
 
         // Constants
 
-        "BOARD_BOTTOM_Y_POS": 550,
+        "BOARD_BOTTOM_Y_POS": 450,
         "PIECE_HEIGHT": 30,
         "PEG_A_X_POS": 166,
         "PEG_B_X_POS": 500,
@@ -48,6 +49,7 @@ TowerGame = function() {
             $(".piece").show();
 
             this.currentPiece = null;
+            this.gameOver = false;
         },
 
         "positionPiece": function(peg, piece, positionInStack) {
@@ -80,6 +82,50 @@ TowerGame = function() {
                 "top": this.HOLDING_Y_POS + "px",
                 "left": (this.HOLDING_X_POS - pieceRadius) + "px"
             });
+        },
+
+        "animatePlacedPiece": function(piece, pegId, position) {
+            var pegXPos;
+            switch (pegId) {
+                case "pegA":
+                    pegXPos = this.PEG_A_X_POS;
+                    break;
+                case "pegB":
+                    pegXPos = this.PEG_B_X_POS;
+                    break;
+                case "pegC":
+                    pegXPos = this.PEG_C_X_POS;
+                    break;
+            }
+
+            var pieceRadius = 150 - ((piece - 1) * 15);
+            var top = this.BOARD_BOTTOM_Y_POS - (this.PIECE_HEIGHT * position);
+
+            // Calculate speedups
+            var pegSpeedUp = (position + 1) * 8;
+            var holdSpeedUp = pegId === "pegB" ? 100 : 0;
+
+            $("#piece" + piece).animate({
+                "top":  "120px",
+                "left": (pegXPos - pieceRadius) + "px"
+            }, (150 - holdSpeedUp), "linear").animate({
+                "top": top + "px"
+            }, (150 - pegSpeedUp), "swing");
+        },
+
+        "animateTakenPiece": function(piece, pegId, position) {
+            var pieceRadius = 150 - ((piece - 1) * 15);
+
+            // Calculate speedups
+            var pegSpeedUp = (position + 1) * 8;
+            var holdSpeedUp = pegId === "pegB" ? 150 : 0;
+
+            $("#piece" + piece).animate({
+                "top": "120px"
+            }, (150 - pegSpeedUp), "linear").animate({
+                "top": this.HOLDING_Y_POS + "px",
+                "left": (this.HOLDING_X_POS - pieceRadius) + "px"
+            }, (250 - holdSpeedUp), "swing");
         },
 
         "isPieceSelected": function() {
@@ -117,21 +163,25 @@ TowerGame = function() {
 
         "addPiece": function(pegId) {
             var peg = this[pegId];
+            var position = peg.length + 1;
             peg.push(this.currentPiece);
-            this.positionPiece(pegId, this.currentPiece, peg.length);
+            this.animatePlacedPiece(this.currentPiece, pegId, position);
+            //this.positionPiece(pegId, this.currentPiece, peg.length);
             this.currentPiece = null;
             this.checkWinState();
         },
 
         "takePiece": function(pegId) {
+            var position = this[pegId].length;
             var piece = this[pegId].pop();
-            this.positionTakenPiece(piece);
+            this.animateTakenPiece(piece, pegId, position);
+            //this.positionTakenPiece(piece);
             this.currentPiece = piece;
         },
 
 
         "checkWinState": function() {
-            
+
         },
 
         "registerEventCallbacks": function() {
@@ -143,6 +193,11 @@ TowerGame = function() {
         "onClickPegArea": function(event) {
             // Retrieve ID of target area
             var targetId = $(event.currentTarget).attr("id");
+
+            // If the game has ended, do nothing
+            if (this.gameOver) {
+                return;
+            }
 
             // If we already have a piece, try to place it
             // otherwise, take a piece from the stack
