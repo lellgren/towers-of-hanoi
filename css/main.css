@@ -1,8 +1,152 @@
-# Styles
+body, html {
+    height: 100%;
+}
 
-.gameContainer
-{
-	margin: auto;
-	width: 600px;
-	border: 1px solid #000;
+body {
+    background-color: #202020;
+}
+
+.gameContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -350px;
+    margin-left: -500px;
+
+    width: 1000px;
+    height: 600px;
+
+    border-radius: 5px;
+}
+
+.boardPegArea {
+    position: absolute;
+
+    margin: 0px;
+    padding: 0px;
+
+    width: 333px;
+    height: 550px;
+
+    z-index: 999;
+}
+
+.boardPegArea:nth-child(2){
+    left: 333px;
+}
+
+.boardPegArea:nth-child(3){
+    left: 666px;
+}
+
+.boardBase {
+    position: absolute;
+    top: 550px;
+    width: 1000px;
+    height: 50px;
+    background-color: #808080;
+    z-index: 2;
+    border-radius: 5px;
+}
+
+.peg {
+    position: absolute;
+    top: 150px;
+
+    height: 410px;
+    width: 20px;
+
+    border-radius: 3px;
+    background-color: #808080;
+    z-index: 1;
+}
+
+.firstPeg {
+    left: 155px;
+}
+
+.middlePeg {
+    left: 489px;
+}
+
+.lastPeg {
+    left: 822px;
+}
+
+.pieces {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.piece {
+    position: absolute;
+    height: 30px;
+    border-radius: 3px;
+    z-index: 3;
+
+    /* Hide pieces at start */
+    display: none;
+}
+
+#piece1 {
+    background-color: #84FF34;
+    width: 300px;
+    top: 0px;
+}
+
+#piece2 {
+    background-color: #43A3FF;
+    width: 270px;
+    top: 30px;
+    left: 15px;
+}
+
+#piece3 {
+    background-color: #FFF034;
+    width: 240px;
+    top: 60px;
+    left: 30px;
+}
+
+#piece4 {
+    background-color: #FF3467;
+    width: 210px;
+    top: 90px;
+    left: 45px;
+}
+
+#piece5 {
+    background-color: #FFAC34;
+    width: 180px;
+    top: 120px;
+    left: 60px;
+}
+
+#piece6 {
+    background-color: #9C44FF;
+    width: 150px;
+    top: 150px;
+    left: 75px;
+}
+
+#piece7 {
+    background-color: #84FF34;
+    width: 120px;
+    top: 180px;
+    left: 90px;
+}
+
+#piece8 {
+    background-color: #43A3FF;
+    width: 90px; 
+    top: 210px;
+    left: 105px;
+}
+
+#piece9 {
+    background-color: #FF3467;
+    width: 60px;
+    top: 240px;
+    left: 120px;
 }
