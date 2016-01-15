@@ -47,6 +47,7 @@ TowerGame = function() {
             // Show pieces again
             $(".piece").show();
 
+            $("#winText").hide();
             this.currentPiece = null;
             this.gameOver = false;
         },
@@ -66,7 +67,7 @@ TowerGame = function() {
 
         "getPegXPos": function(pegId) {
             var pegXPos;
-            switch (peg) {
+            switch (pegId) {
                 case "pegA":
                     pegXPos = this.PEG_A_X_POS;
                     break;
@@ -138,12 +139,12 @@ TowerGame = function() {
         "canPlacePiece": function(pegId) {
             var peg = this[pegId];
             if (peg === undefined) {
-                // show error
+                this.showError("Invalid move");
                 return false;
             }
 
             if (peg[peg.length-1] > this.currentPiece) {
-                // show error
+                this.showError("Invalid move");
                 return false;
             }
             return true;
@@ -152,12 +153,12 @@ TowerGame = function() {
         "canTakePiece": function(pegId) {
             var peg = this[pegId];
             if (peg === undefined) {
-                // show error
+                this.showError("Invalid move");
                 return false;
             }
 
             if (peg.length === 0) {
-                // show error
+                this.showError("No piece to take");
                 return false;
             }
 
@@ -184,7 +185,28 @@ TowerGame = function() {
 
 
         "checkWinState": function() {
+            if (this.pegHasCorrectOrder(this.pegB) || this.pegHasCorrectOrder(this.pegC)) {
+                $("#winText").show();
+                this.gameOver = true;
+            }
+        },
 
+        "pegHasCorrectOrder": function(peg) {
+            if (peg.length === 9) {
+                for (var i = 0; i < 9; i++) {
+                    if (peg[i] !== (i + 1)) {
+                        return false;
+                    }
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        },
+
+        "showError": function(message) {
+            $("#errorMessage span").last().text(message);
+            $("#errorMessage").show().delay(500).fadeOut(250);
         },
 
         "registerEventCallbacks": function() {

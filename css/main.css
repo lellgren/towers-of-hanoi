@@ -32,11 +32,15 @@ body {
     z-index: 999;
 }
 
-.boardPegArea:nth-child(2){
+#pegA {
+    left: 0px;
+}
+
+#pegB {
     left: 333px;
 }
 
-.boardPegArea:nth-child(3){
+#pegC {
     left: 666px;
 }
 
@@ -145,4 +149,46 @@ body {
 #piece9 {
     background-color: #FF3467;
     width: 60px;
+}
+
+
+
+.error {
+    display: none;
+    position: absolute;
+    top: 90px;
+    left: 316px;
+    width: 320px;
+    color: #FFEFF3;
+    background-color: #CB0033;
+    border: 3px solid #FF7B9C;
+    padding: 10px;
+    text-align: center;
+    z-index: 100;
+}
+
+.error span {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.error .errorIcon {
+    font-weight: bold;
+    background-color: #FE0040;
+    padding: 0px 6px;
+    border-radius: 15px;
+    font-size: 20px;
+    margin-right: 15px
+}
+
+.winText {
+    display: none;
+    position: absolute;
+    top: 453px;
+    left: 405px;
+    width: 200px;
+    text-align: center;
+    color: #000000;
+    font-size: 36px;
+    z-index: 155;
 }
