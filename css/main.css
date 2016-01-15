@@ -92,61 +92,44 @@ body {
 #piece1 {
     background-color: #84FF34;
     width: 300px;
-    top: 0px;
 }
 
 #piece2 {
     background-color: #43A3FF;
     width: 270px;
-    top: 30px;
-    left: 15px;
 }
 
 #piece3 {
     background-color: #FFF034;
     width: 240px;
-    top: 60px;
-    left: 30px;
 }
 
 #piece4 {
     background-color: #FF3467;
     width: 210px;
-    top: 90px;
-    left: 45px;
 }
 
 #piece5 {
     background-color: #FFAC34;
     width: 180px;
-    top: 120px;
-    left: 60px;
 }
 
 #piece6 {
     background-color: #9C44FF;
     width: 150px;
-    top: 150px;
-    left: 75px;
 }
 
 #piece7 {
     background-color: #84FF34;
     width: 120px;
-    top: 180px;
-    left: 90px;
 }
 
 #piece8 {
     background-color: #43A3FF;
-    width: 90px; 
-    top: 210px;
-    left: 105px;
+    width: 90px;
 }
 
 #piece9 {
     background-color: #FF3467;
     width: 60px;
-    top: 240px;
-    left: 120px;
 }

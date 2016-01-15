@@ -5,13 +5,23 @@
     <meta charset="UTF-8">
     <title>Towers of Hanoi</title>
     <link rel="stylesheet" type="text/css" href="./css/main.css">
+    <script src="./javascript/head.load.min.js"></script>
+    <script type="text/javascript">
+        head.load("./javascript/jquery-1.12.0.min.js",
+                  "./javascript/towers.js",
+                  function() {
+                    // After scripts are loaded, initialize game and start it
+                    towerGame = new TowerGame();
+                    towerGame.newGame();
+                  })
+    </script>
 </head>
 <body>
 
     <div class="gameContainer">
-        <div id="pegAreaA" class="boardPegArea"></div>
-        <div id="pegAreaB" class="boardPegArea"></div>
-        <div id="pegAreaC" class="boardPegArea"></div>
+        <div id="pegA" class="boardPegArea"></div>
+        <div id="pegB" class="boardPegArea"></div>
+        <div id="pegC" class="boardPegArea"></div>
         <div class="peg firstPeg"></div>
         <div class="peg middlePeg"></div>
         <div class="peg lastPeg"></div>
