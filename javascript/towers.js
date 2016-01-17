@@ -216,6 +216,62 @@ TowerGame = function() {
             }
         },
 
+        "enableAutoPlay": function() {
+            this.autoMoveStep = 1;
+            this.autoPlayInterval = setInterval($.proxy(this.doAutomaticMove, this), 750);
+        },
+
+        "disableAutoPlay": function() {
+            clearInterval(this.autoPlayInterval);
+        },
+
+        "doAutomaticMove": function(event) {
+            if (this.gameOver) {
+                this.disableAutoPlay();
+                return;
+            }
+
+            if (this.autoMoveStep === 1) {
+                if (this.isMoveValid(this.pegA, this.pegC)) {
+                    this.takePiece("pegA");
+                    this.addPiece("pegC");
+                } else {
+                    this.takePiece("pegC");
+                    this.addPiece("pegA");
+                }
+            } else if (this.autoMoveStep === 2) {
+                if (this.isMoveValid(this.pegA, this.pegB)) {
+                    this.takePiece("pegA");
+                    this.addPiece("pegB");
+                } else {
+                    this.takePiece("pegB");
+                    this.addPiece("pegA");
+                }
+            } else { // autoMoveStep === 3
+                if (this.isMoveValid(this.pegB, this.pegC)) {
+                    this.takePiece("pegB");
+                    this.addPiece("pegC");
+                } else {
+                    this.takePiece("pegC");
+                    this.addPiece("pegB");
+                }
+            }
+
+            this.autoMoveStep++;
+            if (this.autoMoveStep > 3) {
+                this.autoMoveStep = 1;
+            }
+        },
+
+        "isMoveValid": function(peg1, peg2) {
+            if (peg1.length === 0) {
+                return false;
+            }
+            var topPiece1 = peg1[peg1.length-1];
+            var topPiece2 = peg2.length === 0 ? 0 : peg2[peg2.length-1];
+            return topPiece1 > topPiece2;
+        },
+
         "showError": function(message) {
             $("#errorMessage span").last().text(message);
             $("#errorMessage").show().delay(500).fadeOut(250);
