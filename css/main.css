@@ -90,6 +90,19 @@ body {
     text-decoration: none;
 }
 
+.controls .button {
+    display: inline-block;
+    padding: 15px;
+    margin: 0 0 0 20px;
+    background-color: #505050;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.controls input[type=checkbox] {
+    margin: 0 5px 0 0;    
+}
+
 .pieces {
     position: absolute;
     width: 100%;

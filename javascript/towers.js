@@ -11,6 +11,7 @@ TowerGame = function() {
 		"pegC": [],
         "currentPiece": null,
         "gameOver": true,
+        "showAnimations": true,
 
         // Constants
 
@@ -168,19 +169,30 @@ TowerGame = function() {
         "addPiece": function(pegId) {
             var peg = this[pegId];
             var position = peg.length + 1;
-            peg.push(this.currentPiece);
-            this.animatePlacedPiece(this.currentPiece, pegId, position);
-            //this.positionPiece(pegId, this.currentPiece, peg.length);
+            var piece = this.currentPiece;
+
+            peg.push(piece);
             this.currentPiece = null;
             this.checkWinState();
+
+            if (this.showAnimations) {
+                this.animatePlacedPiece(piece, pegId, position);    
+            } else {
+                this.positionPiece(pegId, piece, peg.length);
+            }
+            
         },
 
         "takePiece": function(pegId) {
             var position = this[pegId].length;
             var piece = this[pegId].pop();
-            this.animateTakenPiece(piece, pegId, position);
-            //this.positionTakenPiece(piece);
             this.currentPiece = piece;
+
+            if (this.showAnimations) {
+                this.animateTakenPiece(piece, pegId, position);
+            } else {
+                this.positionTakenPiece(piece);
+            }
         },
 
 
@@ -211,6 +223,9 @@ TowerGame = function() {
 
         "registerEventCallbacks": function() {
             $(".boardPegArea").on("click", $.proxy(this.onClickPegArea, this));
+            $("#resetGameButton").on("click", $.proxy(this.onClickResetGame, this));
+            $("#animationToggle").on("click", $.proxy(this.onClickToggleAnimation, this));
+            $("#animationToggle input[type=checkbox]").on("click", $.proxy(this.onClickCheckbox, this));
         },
 
         // Event Handlers
@@ -236,6 +251,27 @@ TowerGame = function() {
                 }
             }
         },
+
+        "onClickResetGame": function(event) {
+            event.preventDefault();
+
+            var response = window.confirm("Are you sure you want to reset the game?");
+            if (response === true) {
+                this.resetPieces();
+            }
+        },
+
+        "onClickToggleAnimation": function(event) {
+            event.preventDefault();
+            this.showAnimations = !this.showAnimations;
+            $("#animationToggle input[type=checkbox]").prop("checked", this.showAnimations);
+        },
+
+        "onClickCheckbox": function(event) {
+            event.stopPropagation();
+            var checked = $(event.currentTarget).prop("checked");
+            this.showAnimations = checked;
+        }
 	};
 	return tower;
 }
