@@ -26,6 +26,7 @@ TowerGame = function() {
         "PEG_C_X_POS": 833,
         "HOLDING_Y_POS": 0,
         "HOLDING_X_POS": 500,
+        "AUTO_MOVE_DELAY": 750,
 
         // Public methods
 
@@ -189,6 +190,8 @@ TowerGame = function() {
 
             peg.push(piece);
             this.currentPiece = null;
+
+            // Always check win state after placing piece
             this.checkWinState();
 
             if (this.showAnimations) {
@@ -235,16 +238,27 @@ TowerGame = function() {
         "enableAutoPlay": function() {
             this.isInAutoPlay = true;
             this.autoMoveStep = 1;
-            this.autoPlayInterval = setInterval($.proxy(this.doAutomaticMove, this), 750);
+            // Set up interval to repeatedly perform automatic moves
+            this.autoPlayInterval = setInterval($.proxy(this.doAutomaticMove, this), this.AUTO_MOVE_DELAY);
+
             $("#autoPlayButton").text("Disable Auto Play");
         },
 
         "disableAutoPlay": function() {
             clearInterval(this.autoPlayInterval);
             this.isInAutoPlay = false;
+
             $("#autoPlayButton").text("Enable Auto Play");
         },
 
+        /**
+         * The algorithm for solving the puzzle contained in this
+         * method assumes that all of the pieces are in their starting
+         * position at first and repeats the same 3 steps repeatedly:
+         *   1. Make a legal move between peg A and peg B
+         *   2. Make a legal move between peg A and peg C
+         *   3. Make a legal move between peg B and peg C
+        */
         "doAutomaticMove": function(event) {
             if (this.gameOver) {
                 this.disableAutoPlay();
@@ -283,6 +297,10 @@ TowerGame = function() {
             }
         },
 
+        /**
+         * Determines if it is allowable to take a piece from
+         * the first peg and move it to the second peg
+        */
         "isMoveValid": function(peg1, peg2) {
             if (peg1.length === 0) {
                 return false;
