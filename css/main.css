@@ -81,12 +81,14 @@ body {
 .controls {
     position: absolute;
     top: 500px;
-    color: #DDDDDD;
+    width: 1000px;
+    text-align: center;
+    color: #FFFFFF;
     padding: 15px;
 }
 
 .controls a {
-    color: #DDDDDD;
+    color: #FFFFFF;
     text-decoration: none;
 }
 
@@ -120,48 +122,43 @@ body {
 }
 
 #piece1 {
-    background-color: #84FF34;
+    background-color: #FF34AF;
     width: 300px;
 }
 
 #piece2 {
-    background-color: #43A3FF;
+    background-color: #9146FF;
     width: 270px;
 }
 
 #piece3 {
-    background-color: #FFF034;
+    background-color: #4986FF;
     width: 240px;
 }
 
 #piece4 {
-    background-color: #FF3467;
+    background-color: #34FF9E;
     width: 210px;
 }
 
 #piece5 {
-    background-color: #FFAC34;
+    background-color: #C0FF34;
     width: 180px;
 }
 
 #piece6 {
-    background-color: #9C44FF;
+    background-color: #FFEA34;
     width: 150px;
 }
 
 #piece7 {
-    background-color: #84FF34;
+    background-color: #FFB934;
     width: 120px;
 }
 
 #piece8 {
-    background-color: #43A3FF;
+    background-color: #FF6834;
     width: 90px;
-}
-
-#piece9 {
-    background-color: #FF3467;
-    width: 60px;
 }
 
 

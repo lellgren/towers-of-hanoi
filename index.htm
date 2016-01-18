@@ -12,7 +12,7 @@
                   function() {
                       // After scripts are loaded, initialize game and start it
                       towerGame = new TowerGame();
-                      towerGame.newGame();
+                      towerGame.initialize();
                   })
     </script>
 </head>
@@ -42,10 +42,10 @@
             <div id="piece6" class="piece"> </div>
             <div id="piece7" class="piece"> </div>
             <div id="piece8" class="piece"> </div>
-            <div id="piece9" class="piece"> </div>
         </div>
         <div class="controls">
             <a id="resetGameButton" class="button" href="#">Reset Game</a>
+            <a id="autoPlayButton" class="button" href="#">Enable Auto Play</a>
             <div id="animationToggle" class="button">
                 <input type="checkbox" name="showAnimations" checked="checked">
                 <span>Show Animations</span>

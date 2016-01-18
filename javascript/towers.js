@@ -11,10 +11,14 @@ TowerGame = function() {
 		"pegC": [],
         "currentPiece": null,
         "gameOver": true,
+        "isInAutoPlay": false,
+        "autoPlayInterval": null,
+        "autoMoveStep": 1,
         "showAnimations": true,
 
         // Constants
 
+        "NUM_PIECES": 8,
         "BOARD_BOTTOM_Y_POS": 450,
         "PIECE_HEIGHT": 30,
         "PEG_A_X_POS": 166,
@@ -25,32 +29,44 @@ TowerGame = function() {
 
         // Public methods
 
-		"newGame": function() {
-			this.resetPieces();
+		"initialize": function() {
+			this.resetGame();
             this.registerEventCallbacks();
 		},
 
-        "resetPieces": function() {
-            // First hide all pieces
-            $(".piece").hide();
+        "resetGame": function() {
+            // Disable automatic play if it is running
+            this.disableAutoPlay();
 
+            // Stop all current piece animations and then
+            // reset their positions
+            $(".piece").stop(true, true);
+            this.resetPieces();
+
+            // Hide messages and reset variables
+            $("#winText").hide();
+            $("#errorMessage").hide();
+            this.currentPiece = null;
+            this.gameOver = false;
+            this.isInAutoPlay = false;
+        },
+
+        "resetPieces": function() {
+            // Hide all pieces and clear game board
+            $(".piece").hide();
             this.pegA = [];
             this.pegB = [];
             this.pegC = [];
 
-            // Reposition pieces to leftmost peg
+            // Reposition all pieces to leftmost peg
             var top, left, pieceRadius;
-            for (var i = 1; i<=9; i++) {
-                this.positionPiece("pegA", i, i);
+            for (var i = 1; i <= this.NUM_PIECES; i++) {
                 this.pegA.push(i);
+                this.positionPiece("pegA", i, i);
             }
 
-            // Show pieces again
+            // Finally show them again
             $(".piece").show();
-
-            $("#winText").hide();
-            this.currentPiece = null;
-            this.gameOver = false;
         },
 
         "positionPiece": function(peg, piece, positionInStack) {
@@ -204,8 +220,8 @@ TowerGame = function() {
         },
 
         "pegHasCorrectOrder": function(peg) {
-            if (peg.length === 9) {
-                for (var i = 0; i < 9; i++) {
+            if (peg.length === this.NUM_PIECES) {
+                for (var i = 0; i < this.NUM_PIECES; i++) {
                     if (peg[i] !== (i + 1)) {
                         return false;
                     }
@@ -217,12 +233,16 @@ TowerGame = function() {
         },
 
         "enableAutoPlay": function() {
+            this.isInAutoPlay = true;
             this.autoMoveStep = 1;
             this.autoPlayInterval = setInterval($.proxy(this.doAutomaticMove, this), 750);
+            $("#autoPlayButton").text("Disable Auto Play");
         },
 
         "disableAutoPlay": function() {
             clearInterval(this.autoPlayInterval);
+            this.isInAutoPlay = false;
+            $("#autoPlayButton").text("Enable Auto Play");
         },
 
         "doAutomaticMove": function(event) {
@@ -232,19 +252,19 @@ TowerGame = function() {
             }
 
             if (this.autoMoveStep === 1) {
-                if (this.isMoveValid(this.pegA, this.pegC)) {
-                    this.takePiece("pegA");
-                    this.addPiece("pegC");
-                } else {
-                    this.takePiece("pegC");
-                    this.addPiece("pegA");
-                }
-            } else if (this.autoMoveStep === 2) {
                 if (this.isMoveValid(this.pegA, this.pegB)) {
                     this.takePiece("pegA");
                     this.addPiece("pegB");
                 } else {
                     this.takePiece("pegB");
+                    this.addPiece("pegA");
+                }
+            } else if (this.autoMoveStep === 2) {
+                if (this.isMoveValid(this.pegA, this.pegC)) {
+                    this.takePiece("pegA");
+                    this.addPiece("pegC");
+                } else {
+                    this.takePiece("pegC");
                     this.addPiece("pegA");
                 }
             } else { // autoMoveStep === 3
@@ -281,6 +301,7 @@ TowerGame = function() {
             $(".boardPegArea").on("click", $.proxy(this.onClickPegArea, this));
             $("#resetGameButton").on("click", $.proxy(this.onClickResetGame, this));
             $("#animationToggle").on("click", $.proxy(this.onClickToggleAnimation, this));
+            $("#autoPlayButton").on("click", $.proxy(this.onClickAutoPlay, this));
             $("#animationToggle input[type=checkbox]").on("click", $.proxy(this.onClickCheckbox, this));
         },
 
@@ -290,8 +311,9 @@ TowerGame = function() {
             // Retrieve ID of target area
             var targetId = $(event.currentTarget).attr("id");
 
-            // If the game has ended, do nothing
-            if (this.gameOver) {
+            // If the game has ended or is in automatic play
+            // then do nothing
+            if (this.gameOver || this.isInAutoPlay) {
                 return;
             }
 
@@ -313,7 +335,27 @@ TowerGame = function() {
 
             var response = window.confirm("Are you sure you want to reset the game?");
             if (response === true) {
-                this.resetPieces();
+                this.resetGame();
+            }
+        },
+
+        "onClickAutoPlay": function(event) {
+            event.preventDefault();
+            
+            if (this.isInAutoPlay) {
+                this.disableAutoPlay();
+            } else {
+                // If the game is in the starting state, just turn on
+                // auto play right away, otherwise show a prompt first
+                if (this.pegA.length === this.NUM_PIECES) {
+                    this.enableAutoPlay();
+                } else {
+                    var response = window.confirm("This will reset the game. Are you sure?");
+                    if (response === true) {
+                        this.resetGame();
+                        this.enableAutoPlay();
+                    }
+                }
             }
         },
 
